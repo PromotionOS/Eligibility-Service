@@ -7,4 +7,5 @@ VALUES
 
     ('b2c3d4e5-f6a7-8901-bcde-f12345678901',
      'c2d3e4f5-a6b7-8901-cdef-234567890123',
-     'tenant-kroger-001', 2, 'GOLD', TRUE, '2024-01-01', '2024-12-31');
+     'tenant-kroger-001', 2, 'GOLD', TRUE, '2024-01-01', '2024-12-31')
+ON CONFLICT (id) DO NOTHING;

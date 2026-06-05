@@ -10,6 +10,7 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+    baseline-version: 0
     url: "jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}"
     user: ${PGUSER}
     password: ${PGPASSWORD}
