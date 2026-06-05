@@ -1,15 +1,19 @@
 #!/bin/sh
 set -e
 
-# Railway provides DATABASE_URL as postgresql://user:pass@host:port/db
-# Spring JDBC requires jdbc:postgresql://user:pass@host:port/db
-if [ -n "$DATABASE_URL" ]; then
-  STRIPPED="${DATABASE_URL#postgres://}"
+# Normalize DB_URL to jdbc:postgresql:// regardless of source or current scheme.
+# Railway may inject DB_URL as postgresql:// or DATABASE_URL as postgres://.
+RAW_URL="${DATABASE_URL:-$DB_URL}"
+if [ -n "$RAW_URL" ]; then
+  STRIPPED="${RAW_URL#jdbc:postgresql://}"
+  STRIPPED="${STRIPPED#jdbc:postgres://}"
   STRIPPED="${STRIPPED#postgresql://}"
+  STRIPPED="${STRIPPED#postgres://}"
   export DB_URL="jdbc:postgresql://${STRIPPED}"
-  echo "INFO: DB_URL scheme set to jdbc:postgresql://"
+  echo "INFO: DB_URL normalized to jdbc:postgresql://"
 else
-  echo "WARN: DATABASE_URL not set — DB_URL must be provided manually"
+  echo "ERROR: Neither DATABASE_URL nor DB_URL is set"
+  exit 1
 fi
 
 exec java -jar /app/app.jar
