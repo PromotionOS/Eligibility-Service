@@ -5,6 +5,7 @@ import com.promotionos.eligibility.infrastructure.event.CampaignPublishedConsume
 import com.promotionos.eligibility.infrastructure.event.CatalogItemExcludedConsumer;
 import com.promotionos.eligibility.infrastructure.event.SegmentUpdatedConsumer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +35,12 @@ public class RedisConfig {
     private final SegmentUpdatedConsumer segmentUpdatedConsumer;
 
     @Bean
+    @ConditionalOnProperty(
+        prefix = "promotionos.redis.listener",
+        name = "enabled",
+        havingValue = "true",
+        matchIfMissing = true
+    )
     public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);

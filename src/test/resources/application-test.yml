@@ -18,6 +18,8 @@ promotionos:
     catalog-url: http://localhost:8084
     campaign-url: http://localhost:8081
   redis:
+    listener:
+      enabled: false
     channels:
       campaign-published: promotionos.campaign.published
       campaign-paused: promotionos.campaign.paused
