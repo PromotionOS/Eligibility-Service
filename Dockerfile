@@ -7,6 +7,9 @@ RUN mvn clean package -DskipTests -q
 
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-ENV SPRING_PROFILES_ACTIVE=railway
+LABEL railway.cache-bust="2026-06-05-railway-healthcheck"
+ENV SPRING_PROFILES_ACTIVE=railway \
+    MANAGEMENT_HEALTH_REDIS_ENABLED=false \
+    MANAGEMENT_HEALTH_DB_ENABLED=false
 COPY --from=build /app/target/*.jar app.jar
-CMD ["sh", "-c", "java -jar /app/app.jar"]
+CMD ["sh", "-c", "echo \"Starting eligibility-service with SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}\" && java -jar /app/app.jar"]
